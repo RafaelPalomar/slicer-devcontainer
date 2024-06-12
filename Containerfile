@@ -11,6 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Copy the 'extra-packages' file containing the list of packages to be installed
 COPY extra-packages /
+COPY pip-packages /
 
 # Update and install dependencies
 RUN apt-get update && \
@@ -18,6 +19,8 @@ RUN apt-get update && \
     # Clean up to reduce the image size
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install $(grep -v '^#' /pip-packages)
 
 # Example command to clone and build 3D Slicer; adjust as necessary for your specific use case
 # This step might be performed outside of the Dockerfile, depending on your development workflow
